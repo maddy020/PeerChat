@@ -20,6 +20,7 @@ const io = new Server(httpServer, {
 app.use(
   cors({
     origin: "https://peer-chat-seven.vercel.app",
+    credentials: true,
   })
 );
 app.use(express.json());
