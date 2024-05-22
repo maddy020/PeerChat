@@ -5,19 +5,10 @@ import authRoutes from "./routes/auth";
 import userRoutes from "./routes/user";
 import dbconnection from "./config/db";
 import { createServer } from "http";
-import { ExpressPeerServer } from "peer";
 import { Server } from "socket.io";
 
 const app = express();
-const url = process.env.URI as string;
-
 const httpServer = createServer(app);
-
-dbconnection(url)
-  .then(() => {
-    httpServer.listen(8080, () => console.log("Server is running fine"));
-  })
-  .catch((err) => console.log("Error in connection to the database", err));
 
 const io = new Server(httpServer, {
   cors: {
@@ -58,3 +49,11 @@ io.on("connection", (socket) => {
     }
   });
 });
+
+const url = process.env.URI as string;
+
+dbconnection(url)
+  .then(() => {
+    httpServer.listen(8080, () => console.log("Server is running fine"));
+  })
+  .catch((err) => console.log("Error in connection to the database", err));
