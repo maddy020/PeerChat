@@ -21,12 +21,16 @@ dbconnection(url)
 
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://peer-chat-seven.vercel.app"],
     credentials: true,
   },
 });
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://peer-chat-seven.vercel.app"],
+  })
+);
 app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
