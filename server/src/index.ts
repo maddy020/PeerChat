@@ -12,14 +12,14 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: "*",
+    origin: "/*",
     credentials: true,
   },
 });
 
 app.use(
   cors({
-    origin: "https://peer-chat-seven.vercel.app",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );

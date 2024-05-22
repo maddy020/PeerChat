@@ -1,7 +1,5 @@
 import { io } from "socket.io-client";
 
-const socket = io("https://peerchat-110t.onrender.com", {
-  withCredentials: true,
-});
+const socket = io(`${import.meta.env.VITE_BACKEND_BASE_URL}`);
 
 export default socket;
