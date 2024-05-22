@@ -28,7 +28,7 @@ const io = new Server(httpServer, {
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://peer-chat-seven.vercel.appJ"],
+    origin: ["http://localhost:5173", "https://peer-chat-seven.vercel.app"],
   })
 );
 app.use(express.json());
