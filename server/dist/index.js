@@ -9,16 +9,47 @@ const cors_1 = __importDefault(require("cors"));
 const auth_1 = __importDefault(require("./routes/auth"));
 const user_1 = __importDefault(require("./routes/user"));
 const db_1 = __importDefault(require("./config/db"));
-const http_1 = __importDefault(require("http"));
+const http_1 = require("http");
+const socket_io_1 = require("socket.io");
 const app = (0, express_1.default)();
-const server = http_1.default.createServer(() => console.log("Server is running"));
 const url = process.env.URI;
+const httpServer = (0, http_1.createServer)(app);
+(0, db_1.default)(url)
+    .then(() => {
+    httpServer.listen(8080, () => console.log("Server is running fine"));
+})
+    .catch((err) => console.log("Error in connection to the database", err));
+const io = new socket_io_1.Server(httpServer, {
+    cors: {
+        origin: "http://localhost:5173",
+        credentials: true,
+    },
+});
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use("/auth", auth_1.default);
 app.use("/user", user_1.default);
-(0, db_1.default)(url)
-    .then(() => {
-    app.listen(8080, () => console.log("Server is running fine"));
-})
-    .catch((err) => console.log("Error in connection to the database", err));
+const onlineUsers = new Map();
+io.on("connection", (socket) => {
+    socket.on("addUser", (id) => {
+        onlineUsers.set(id, socket.id);
+        console.log("User added:", id);
+    });
+    socket.on("requestConnection", (toId, fromId) => {
+        const socketid = onlineUsers.get(toId);
+        if (socketid)
+            io.to(socketid).emit("showPopup", fromId);
+    });
+    socket.on("reqAnswer", (rid, from, to, isAccepted) => {
+        if (isAccepted === true) {
+            const socketid = onlineUsers.get(to);
+            if (socketid)
+                io.to(socketid).emit("reqAccepted", rid);
+        }
+        else {
+            const socketid = onlineUsers.get(to);
+            if (socketid)
+                io.to(socketid).emit("reqDeclined", null);
+        }
+    });
+});

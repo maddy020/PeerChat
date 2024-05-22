@@ -3,4 +3,10 @@ export interface userTypes {
   username: string;
   name: string;
   password: string;
+  peerId: string;
+}
+
+export interface messageTypes {
+  self: boolean;
+  message: string;
 }

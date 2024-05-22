@@ -54,6 +54,7 @@ const SigninComponent = ({
         }
       );
       localStorage.setItem("authtoken", response.data.token);
+      localStorage.setItem("userID", response.data.id);
       setisLoggedIn(true);
       setUsername("");
       setPassword("");

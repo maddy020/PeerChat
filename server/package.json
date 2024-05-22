@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "tsc -b &&  node dist/index.js",
+    "dev": "nodemon src/index.ts",
+    "start": "tsc -b && node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -22,7 +23,11 @@
     "http": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.0",
-    "nodemon": "^3.1.0",
-    "peer": "^1.0.2"
+    "peer": "^1.0.2",
+    "socket.io": "^4.7.5",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

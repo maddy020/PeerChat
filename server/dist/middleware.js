@@ -16,7 +16,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 function getUser(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            if (!req.headers.authorization) {
+            if (!req.headers) {
                 return res.status(401).json({ message: "Unauthorized" });
             }
             const token = req.headers.authorization.split(" ")[1];
@@ -24,9 +24,7 @@ function getUser(req, res, next) {
                 return res.status(401).json({ message: "Unauthorized" });
             }
             const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
-            if (!decoded) {
-                return res.status(401).json({ message: "Unauthorized" });
-            }
+            req.user = decoded;
             next();
         }
         catch (error) {

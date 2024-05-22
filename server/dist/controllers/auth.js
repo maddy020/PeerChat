@@ -27,10 +27,11 @@ function handleLogin(req, res) {
             const validPassword = yield bcrypt_1.default.compare(password, hashedpassword);
             if (!validPassword)
                 return res.status(401).json({ message: "Invalid Credentials" });
-            const token = jsonwebtoken_1.default.sign({ name: user.name, username: user.username }, process.env.JWT_SECRET, {
-                expiresIn: "1h",
-            });
-            return res.status(201).json({ message: "User Logged In", token: token });
+            const id = user._id;
+            const token = jsonwebtoken_1.default.sign({ id }, process.env.JWT_SECRET);
+            return res
+                .status(201)
+                .json({ message: "User Logged In", token: token, id: id });
         }
         catch (error) {
             console.log(error);
@@ -52,10 +53,10 @@ function handleSignup(req, res) {
                 name,
                 username,
                 password: hashedpassword,
+                peerId: name,
             });
-            const token = jsonwebtoken_1.default.sign({ name, username }, process.env.JWT_SECRET, {
-                expiresIn: "1h",
-            });
+            const id = user._id;
+            const token = jsonwebtoken_1.default.sign({ id }, process.env.JWT_SECRET);
             return res.status(201).json({ message: "User Created", token: token });
         }
         catch (error) {

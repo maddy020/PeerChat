@@ -16,15 +16,11 @@ async function handleLogin(req: Request, res: Response) {
     const validPassword = await bcrypt.compare(password, hashedpassword);
     if (!validPassword)
       return res.status(401).json({ message: "Invalid Credentials" });
-
-    const token = jwt.sign(
-      { name: user.name, username: user.username },
-      process.env.JWT_SECRET as string,
-      {
-        expiresIn: "1h",
-      }
-    );
-    return res.status(201).json({ message: "User Logged In", token: token });
+    const id = user._id;
+    const token = jwt.sign({ id }, process.env.JWT_SECRET as string);
+    return res
+      .status(201)
+      .json({ message: "User Logged In", token: token, id: id });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: "Unauthorized" });
@@ -43,14 +39,10 @@ async function handleSignup(req: Request, res: Response) {
       name,
       username,
       password: hashedpassword,
+      peerId: name,
     });
-    const token = jwt.sign(
-      { name, username },
-      process.env.JWT_SECRET as string,
-      {
-        expiresIn: "1h",
-      }
-    );
+    const id = user._id;
+    const token = jwt.sign({ id }, process.env.JWT_SECRET as string);
     return res.status(201).json({ message: "User Created", token: token });
   } catch (error) {
     console.log(error);

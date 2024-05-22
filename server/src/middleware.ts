@@ -1,12 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+
 export default async function getUser(
-  req: Request,
+  req: any,
   res: Response,
   next: NextFunction
 ) {
   try {
-    if (!req.headers.authorization) {
+    if (!req.headers) {
       return res.status(401).json({ message: "Unauthorized" });
     }
     const token = req.headers.authorization.split(" ")[1];
@@ -14,9 +15,7 @@ export default async function getUser(
       return res.status(401).json({ message: "Unauthorized" });
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-    if (!decoded) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
+    req.user = decoded;
     next();
   } catch (error) {
     console.log(error);

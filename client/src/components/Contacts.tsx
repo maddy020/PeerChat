@@ -24,10 +24,12 @@ const Contacts = ({
             className="flex items-center cursor-pointer"
             onClick={() => setSelectedUserId(user._id)}
           >
-            <div>
-              <h1 className="text-lg font-semibold">{user._id}</h1>
-              <p className="text-sm">{user.username}</p>
-            </div>
+            {
+              <div>
+                <h1 className="text-lg font-semibold">{user._id}</h1>
+                <p className="text-sm">{user.username}</p>
+              </div>
+            }
           </li>
         ))}
       </ul>
